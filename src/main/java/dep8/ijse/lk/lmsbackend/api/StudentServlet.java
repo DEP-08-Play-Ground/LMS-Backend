@@ -7,17 +7,49 @@ import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.*;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import javax.sql.DataSource;
 import javax.xml.bind.ValidationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+@WebServlet(name = "StudentServlet", urlPatterns = {"/students","/students/"},loadOnStartup = 1)
 public class StudentServlet extends HttpServlet {
+
+    @Resource(name = "java:comp/env/jdbc/pool4lms")
+    public volatile DataSource pool;
+
+//    @Override
+//    public void init() throws ServletException {
+//        try {
+//            InitialContext ctx = new InitialContext();
+//            pool = (DataSource) ctx.lookup("java:comp/env/jdbc/pool4lms");
+//            System.out.println(pool.getConnection());
+//
+//        } catch (NamingException | SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
+
+//    @PostConstruct
+//    public void myInit(){
+//        System.out.println(pool); can access a resource here!!!!
+//    }
+
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -119,7 +151,28 @@ public class StudentServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        System.out.println(student);
+        try (Connection connection = pool.getConnection()) {
+            PreparedStatement stm = connection.prepareStatement("INSERT INTO student (name,nic,email) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1,student.getName());
+            stm.setString(2,student.getNic());
+            stm.setString(3,student.getEmail());
+            int i = stm.executeUpdate();
+            if (i!=1){
+                throw new RuntimeException();
+            }
+            ResultSet generatedKeys = stm.getGeneratedKeys();
+            generatedKeys.next();
+            student.setId(generatedKeys.getString(1));
+
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            response.setContentType("application/json");
+            jsonb.toJson(student,response.getWriter());
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
 
     }
 
