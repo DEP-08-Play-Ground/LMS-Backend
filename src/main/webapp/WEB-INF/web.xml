@@ -5,7 +5,7 @@
          version="4.0">
     <servlet>
         <servlet-name>StudentServlet</servlet-name>
-        <servlet-class>dep8.ijse.lk.lmsbackend.StudentServlet</servlet-class>
+        <servlet-class>dep8.ijse.lk.lmsbackend.api.StudentServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StudentServlet</servlet-name>

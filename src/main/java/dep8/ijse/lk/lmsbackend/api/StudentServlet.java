@@ -1,5 +1,6 @@
-package dep8.ijse.lk.lmsbackend;
+package dep8.ijse.lk.lmsbackend.api;
 
+import dep8.ijse.lk.lmsbackend.Customer;
 import jakarta.json.*;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
