@@ -14,8 +14,30 @@
 <!--        <url-pattern>/students/</url-pattern>-->
 <!--    </servlet-mapping>-->
 
-    <resource-env-ref>
-        <resource-env-ref-name>jdbc/pool4lms</resource-env-ref-name>
-    </resource-env-ref>
+<!--    <resource-env-ref>-->
+<!--        <resource-env-ref-name>jdbc/pool4lms</resource-env-ref-name>-->
+<!--    </resource-env-ref>-->
+
+<!--    <filter>-->
+<!--        <filter-name>CorsFilter</filter-name>-->
+<!--        <init-param>-->
+<!--            <param-name>origin</param-name>-->
+<!--            <param-value></param-value>-->
+<!--        </init-param>-->
+<!--    </filter>-->
+    <context-param>
+        <param-name>origin</param-name>
+        <param-value>http://localhost:1234</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>dep8.ijse.lk.lmsbackend.api.CorsFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>
