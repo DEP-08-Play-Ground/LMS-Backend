@@ -131,6 +131,11 @@ public class StudentServlet extends HttpServlet {
 
         /*=============================================================*/
 
+//        String origin = request.getHeader("Origin");
+//        if (origin.contains("localhost:1234")) {
+//            response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+//        }
+
         Jsonb jsonb = JsonbBuilder.create();
         StudentDTO student = null;
         try {
@@ -185,4 +190,19 @@ public class StudentServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     }
+
+//    @Override
+//    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String origin = req.getHeader("Origin");
+//        if (origin.contains("localhost:1234")){
+//            resp.setHeader("Access-Control-Allow-Origin","http://localhost:8080");
+//            if (req.getMethod().equals("OPTIONS")){
+//                resp.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE,HEADER");
+//                resp.setHeader("Access-Control-Allow-Headers","Content-Type");
+//                resp.setHeader("Access-Control-Expose-Headers","Content-Type");
+//            }
+//        }
+//        super.service(req, resp);
+//    }
+
 }
